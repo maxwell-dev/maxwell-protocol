@@ -1,0 +1,292 @@
+syntax = "proto3";
+
+package maxwell.protocol;
+
+/* msg type enum */
+
+enum msg_type_t {
+    /* unused, placeholder for gpb: 0 */
+    UNKNOWN = 0;
+
+    /* core protocols: 1~32 */
+    PING_REQ = 1;
+    PING_REP = 2;
+    PULL_REQ = 3;
+    PULL_REP = 4;
+    PUSH_REQ = 5;
+    PUSH_REP = 6;
+    DO_REQ = 7;
+    DO_REP = 8;
+    DO2_REQ = 9;
+    DO2_REP = 10;
+    AUTH_REQ = 27;
+    AUTH_REP = 28;
+    OK_REP = 29;
+    ERROR_REP = 30;
+    OK2_REP = 31;
+    ERROR2_REP = 32;
+
+    /* frontend-master protocols: 65~80 */
+    REGISTER_FRONTEND_REQ = 65;
+    REGISTER_FRONTEND_REP = 66;
+    ADD_ROUTE_REQ = 67;
+    ADD_ROUTE_REP = 68;
+    DELETE_ROUTE_REQ = 69;
+    DELETE_ROUTE_REP = 70;
+    ADD_ROUTE_MSG = 71;
+    DELETE_ROUTE_MSG = 72;
+    PUSH_ROUTES_REQ = 73;
+    PUSH_ROUTES_REP = 74;
+    PULL_ROUTES_REQ = 75;
+    PULL_ROUTES_REP = 76;
+
+    /* backend-master protocols: 81~96 */
+    REGISTER_BACKEND_REQ = 81;
+    REGISTER_BACKEND_REP = 82;
+    DELETE_TOPICS_REQ = 83;
+    DELETE_TOPICS_REP = 84;
+
+    /* client-master protocols: 97-104 */
+    RESOLVE_FRONTEND_REQ = 97;
+    RESOLVE_FRONTEND_REP = 98;
+    RESOLVE_BACKEND_REQ = 99;
+    RESOLVE_BACKEND_REP = 100;
+
+    /* client-frontend protocols: 105~112 */
+    WATCH_REQ = 105;
+    WATCH_REP = 106;
+    UNWATCH_REQ = 107;
+    UNWATCH_REP = 108;
+
+    /* client-backend protocols: 113~120 */
+}
+
+/* msg type defs */
+
+/* core protocols */
+message ping_req_t {
+    uint32 ref = 15;
+}
+
+message ping_rep_t {
+    uint32 ref = 15;
+}
+
+message pull_req_t {
+    string topic = 1;
+    int64 offset = 2; // int64, not uint64
+    uint32 limit = 3;
+    uint32 ref = 15;
+}
+
+message pull_rep_t {
+    repeated msg_t msgs = 1;
+    uint32 ref = 15;
+}
+
+message push_req_t {
+    string topic = 1;
+    bytes value = 2;
+    uint32 ref = 15;
+}
+
+message push_rep_t {
+    uint32 ref = 15;
+}
+
+message do_req_t {
+    string type = 1;
+    string value = 2;
+    bool source_enabled = 13;
+    source_t source = 14;
+    repeated trace_t traces = 15;
+}
+
+message do_rep_t {
+    string value = 1;
+    repeated trace_t traces = 15;
+}
+
+message do2_req_t {
+    string type = 1;
+    bool source_enabled = 13;
+    source_t source = 14;
+    repeated trace_t traces = 15;
+}
+
+message do2_rep_t {
+    bytes value = 1;
+    repeated trace_t traces = 15;
+}
+
+message auth_req_t {
+    string token = 1;
+    uint32 ref = 15;
+}
+
+message auth_rep_t {
+    uint32 ref = 15;
+}
+
+message ok_rep_t {
+    uint32 ref = 15;
+}
+
+message error_rep_t {
+    int32 code = 1;
+    string desc = 2;
+    uint32 ref = 15;
+}
+
+message ok2_rep_t {
+    repeated trace_t traces = 15;
+}
+
+message error2_rep_t {
+    int32 code = 1;
+    string desc = 2;
+    repeated trace_t traces = 15;
+}
+
+/* client-frontend protocols */
+
+message watch_req_t {
+    string type = 1;
+    uint32 ref = 15;
+}
+
+message watch_rep_t {
+    uint32 ref = 15;
+}
+
+message unwatch_req_t {
+    string type = 1;
+    uint32 ref = 15;
+}
+
+message unwatch_rep_t {
+    uint32 ref = 15;
+}
+
+/* frontend-master protocols */
+
+message register_frontend_req_t {
+    string endpoint = 1; // public endpoint
+    uint32 ref = 15;
+}
+
+message register_frontend_rep_t {
+    uint32 ref = 15;
+}
+
+message add_route_req_t {
+    string type = 1;
+    uint32 ref = 15;
+}
+
+message add_route_rep_t {
+    uint32 ref = 15;
+}
+
+message delete_route_req_t {
+    string type = 1;
+    uint32 ref = 15;
+}
+
+message delete_route_rep_t {
+    uint32 ref = 15;
+}
+
+message add_route_msg_t {
+    string endpoint = 1;
+    uint32 ref = 15;
+}
+
+message delete_route_msg_t {
+    string type = 1;
+    string endpoint = 2;
+    uint32 ref = 15;
+}
+
+message push_routes_req_t {
+    repeated string types = 1;
+    uint32 ref = 15;
+}
+
+message push_routes_rep_t {
+    uint32 ref = 15;
+}
+
+message pull_routes_req_t {
+    uint32 ref = 15;
+}
+
+message pull_routes_rep_t {
+    repeated route_group_t route_groups = 1;
+    uint32 ref = 15;
+}
+
+message delete_topics_req_t {
+    repeated string topics = 1;
+    uint32 ref = 15;
+}
+
+message delete_topics_rep_t {
+    uint32 ref = 15;
+}
+
+/* backend-master protocols */
+
+message register_backend_req_t {
+    string endpoint = 1; // public endpoint
+    uint32 ref = 15;
+}
+
+message register_backend_rep_t {
+    uint32 ref = 15;
+}
+
+/* client-master protocols */
+
+message resolve_frontend_req_t {
+    uint32 ref = 15;
+}
+
+message resolve_frontend_rep_t {
+    string endpoint = 1;
+    uint32 ref = 15;
+}
+
+message resolve_backend_req_t {
+    string topic = 1;
+    uint32 ref = 15;
+}
+
+message resolve_backend_rep_t {
+    string endpoint = 1;
+    uint32 ref = 15;
+}
+
+/* data type defs */
+
+message msg_t {
+    uint64 offset = 1; // uint64, not int64
+    bytes value = 2;
+    uint64 timestamp = 3;
+}
+
+message source_t {
+    string agent = 1;
+    string endpoint = 2;
+}
+
+message trace_t {
+    uint32 ref = 1;
+    uint32 handler_id = 2;
+    uint32 node_id = 3;
+}
+
+message route_group_t {
+    string type = 1;
+    repeated string endpoints = 2;
+}
