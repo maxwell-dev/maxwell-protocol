@@ -126,6 +126,7 @@ message resolve_ip_req_t {
 }
 
 message resolve_ip_rep_t {
+    string ip = 1;
     uint32 ref = 15;
 }
 
