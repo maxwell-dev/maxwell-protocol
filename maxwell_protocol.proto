@@ -19,8 +19,6 @@ enum msg_type_t {
     DO_REP = 8;
     DO2_REQ = 9;
     DO2_REP = 10;
-    RESOLVE_IP_REQ = 11;
-    RESOLVE_IP_REP = 12;
     AUTH_REQ = 27;
     AUTH_REP = 28;
     OK_REP = 29;
@@ -61,6 +59,10 @@ enum msg_type_t {
     UNWATCH_REP = 108;
 
     /* client-backend protocols: 113~120 */
+
+    /* misc protocols: 121~127 */
+    RESOLVE_IP_REQ = 121;
+    RESOLVE_IP_REP = 122;
 }
 
 /* msg type defs */
@@ -119,15 +121,6 @@ message do2_req_t {
 message do2_rep_t {
     bytes value = 1;
     repeated trace_t traces = 15;
-}
-
-message resolve_ip_req_t {
-    uint32 ref = 15;
-}
-
-message resolve_ip_rep_t {
-    string ip = 1;
-    uint32 ref = 15;
 }
 
 message auth_req_t {
@@ -275,6 +268,17 @@ message resolve_backend_req_t {
 
 message resolve_backend_rep_t {
     string endpoint = 1;
+    uint32 ref = 15;
+}
+
+/* misc protocols */
+
+message resolve_ip_req_t {
+    uint32 ref = 15;
+}
+
+message resolve_ip_rep_t {
+    string ip = 1;
     uint32 ref = 15;
 }
 
