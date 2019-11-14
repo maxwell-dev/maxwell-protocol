@@ -80,6 +80,7 @@ message pull_req_t {
     string topic = 1;
     int64 offset = 2; // int64, not uint64
     uint32 limit = 3;
+    uint32 puller = 4;
     uint32 ref = 15;
 }
 
