@@ -299,7 +299,7 @@ message source_t {
 message trace_t {
     uint32 ref = 1;
     uint32 handler_id = 2;
-    uint32 node_id = 3;
+    bytes node_id = 3;
 }
 
 message route_group_t {
