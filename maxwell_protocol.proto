@@ -34,15 +34,15 @@ enum msg_type_t {
   REGISTER_SERVER_REQ = 69;
   REGISTER_SERVER_REP = 70;
 
-  //   ADD_TOPICS_REQ = 81;
-  //   ADD_TOPICS_REP = 82;
-  //   DELETE_TOPICS_REQ = 83;
-  //   DELETE_TOPICS_REP = 84;
+  //   ADD_TOPICS_REQ := 81;
+  //   ADD_TOPICS_REP := 82;
+  //   DELETE_TOPICS_REQ := 83;
+  //   DELETE_TOPICS_REP := 84;
 
-  //   ADD_ROUTE_REQ = 91;
-  //   ADD_ROUTE_REP = 92;
-  //   DELETE_ROUTE_REQ = 93;
-  //   DELETE_ROUTE_REP = 94;
+  //   ADD_ROUTE_REQ := 91;
+  //   ADD_ROUTE_REP := 92;
+  //   DELETE_ROUTE_REQ := 93;
+  //   DELETE_ROUTE_REP := 94;
   ADD_ROUTE_MSG = 95;
   DELETE_ROUTE_MSG = 96;
   PUSH_ROUTES_REQ = 97;
