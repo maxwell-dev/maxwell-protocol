@@ -12,10 +12,10 @@ enum msg_type_t {
 
   PING_REQ = 1;
   PING_REP = 2;
-  PULL_REQ = 3;
-  PULL_REP = 4;
-  PUSH_REQ = 5;
-  PUSH_REP = 6;
+  PUSH_REQ = 3;
+  PUSH_REP = 4;
+  PULL_REQ = 5;
+  PULL_REP = 6;
   REQ_REQ = 7;
   REQ_REP = 8;
   AUTH_REQ = 27;
@@ -34,21 +34,21 @@ enum msg_type_t {
   REGISTER_SERVER_REQ = 69;
   REGISTER_SERVER_REP = 70;
 
-  //   ADD_TOPICS_REQ := 81;
-  //   ADD_TOPICS_REP := 82;
-  //   DELETE_TOPICS_REQ := 83;
-  //   DELETE_TOPICS_REP := 84;
+  // ADD_TOPICS_REQ := 81;
+  // ADD_TOPICS_REP := 82;
+  // DELETE_TOPICS_REQ := 83;
+  // DELETE_TOPICS_REP := 84;
 
-  //   ADD_ROUTE_REQ := 91;
-  //   ADD_ROUTE_REP := 92;
-  //   DELETE_ROUTE_REQ := 93;
-  //   DELETE_ROUTE_REP := 94;
-  ADD_ROUTE_MSG = 95;
-  DELETE_ROUTE_MSG = 96;
-  PUSH_ROUTES_REQ = 97;
-  PUSH_ROUTES_REP = 98;
-  PULL_ROUTES_REQ = 99;
-  PULL_ROUTES_REP = 100;
+  ADD_ROUTES_REQ = 91;
+  ADD_ROUTES_REP = 92;
+  // DELETE_ROUTES_REQ := 93;
+  // DELETE_ROUTES_REP := 94;
+  GET_ROUTES_REQ = 95;
+  GET_ROUTES_REP = 96;
+
+  ROUTE_ADDED_MSG = 100;
+  ROUTE_DELETED_MSG = 101;
+  ROUTE_STATUS_CHANGED_MSG = 102;
 
   ASSIGN_FRONTEND_REQ = 111;
   ASSIGN_FRONTEND_REP = 112;
@@ -62,150 +62,170 @@ enum msg_type_t {
 
 /* business protocols: 1~32 */
 
-message ping_req_t { uint32 ref = 15; }
+message ping_req_t { uint32 round_ref = 15; }
 
-message ping_rep_t { uint32 ref = 15; }
+message ping_rep_t { uint32 round_ref = 15; }
+
+message push_req_t {
+  string topic = 1;
+  bytes value = 2;
+  uint32 round_ref = 15;
+}
+
+message push_rep_t { uint32 round_ref = 15; }
 
 message pull_req_t {
   string topic = 1;
   int64 offset = 2; // int64, not uint64
   uint32 limit = 3;
-  uint32 puller = 4;
-  trace_t trace = 15;
+  uint32 client_ref = 13;
+  uint32 frontend_ref = 14;
+  uint32 round_ref = 15;
 }
 
 message pull_rep_t {
   repeated msg_t msgs = 1;
-  trace_t trace = 15;
+  uint32 client_ref = 13;
+  uint32 frontend_ref = 14;
+  uint32 round_ref = 15;
 }
-
-message push_req_t {
-  string topic = 1;
-  bytes value = 2;
-  uint32 ref = 15;
-}
-
-message push_rep_t { uint32 ref = 15; }
 
 message req_req_t {
-  string type = 1;
-  string value = 2;
-  source_t source = 14;
-  trace_t trace = 15;
+  string path = 1;
+  string payload = 2;
+  header_t header = 12;
+  uint32 client_ref = 13;
+  uint32 frontend_ref = 14;
+  uint32 round_ref = 15;
 }
 
 message req_rep_t {
-  string value = 1;
-  trace_t trace = 15;
+  string payload = 1;
+  uint32 client_ref = 13;
+  uint32 frontend_ref = 14;
+  uint32 round_ref = 15;
 }
 
 message auth_req_t {
   string token = 1;
-  uint32 ref = 15;
+  uint32 client_ref = 13;
+  uint32 frontend_ref = 14;
+  uint32 round_ref = 15;
 }
 
-message auth_rep_t { uint32 ref = 15; }
+message auth_rep_t {
+  uint32 client_ref = 13;
+  uint32 frontend_ref = 14;
+  uint32 round_ref = 15;
+}
 
-message ok_rep_t { uint32 ref = 15; }
+message ok_rep_t { uint32 round_ref = 15; }
 
 message error_rep_t {
   int32 code = 1;
   string desc = 2;
-  uint32 ref = 15;
+  uint32 round_ref = 15;
 }
 
-message ok2_rep_t { trace_t trace = 15; }
+message ok2_rep_t {
+  uint32 client_ref = 13;
+  uint32 frontend_ref = 14;
+  uint32 round_ref = 15;
+}
 
 message error2_rep_t {
   int32 code = 1;
   string desc = 2;
-  trace_t trace = 15;
+  uint32 client_ref = 13;
+  uint32 frontend_ref = 14;
+  uint32 round_ref = 15;
 }
 
 /* middleware protocols: 65~127 */
 
 message register_frontend_req_t {
   string endpoint = 1; // public endpoint
-  uint32 ref = 15;
+  uint32 round_ref = 15;
 }
 
-message register_frontend_rep_t { uint32 ref = 15; }
+message register_frontend_rep_t { uint32 round_ref = 15; }
 
 message register_backend_req_t {
   string endpoint = 1; // public endpoint
-  uint32 ref = 15;
+  uint32 round_ref = 15;
 }
 
-message register_backend_rep_t { uint32 ref = 15; }
+message register_backend_rep_t { uint32 round_ref = 15; }
 
 message register_server_req_t {
   string endpoint = 1; // public endpoint
-  uint32 ref = 15;
+  uint32 round_ref = 15;
 }
 
-message register_server_rep_t { uint32 ref = 15; }
+message register_server_rep_t { uint32 round_ref = 15; }
 
-message add_route_req_t {
-  string type = 1;
-  uint32 ref = 15;
+message add_routes_req_t {
+  repeated string paths = 1;
+  uint32 round_ref = 15;
 }
 
-message add_route_rep_t { uint32 ref = 15; }
+message add_routes_rep_t { uint32 round_ref = 15; }
 
-message delete_route_req_t {
-  string type = 1;
-  uint32 ref = 15;
+message delete_routes_req_t {
+  repeated string paths = 1;
+  uint32 round_ref = 15;
 }
 
-message delete_route_rep_t { uint32 ref = 15; }
+message delete_routes_rep_t { uint32 round_ref = 15; }
 
-message add_route_msg_t {
-  string endpoint = 1;
-  uint32 ref = 15;
+message get_routes_req_t { uint32 round_ref = 15; }
+
+message get_routes_rep_t {
+  repeated route_t routes = 1;
+  uint32 round_ref = 15;
 }
 
-message delete_route_msg_t {
-  string type = 1;
+message route_added_msg_t {
+  string path = 1;
   string endpoint = 2;
-  uint32 ref = 15;
+  uint32 round_ref = 15;
 }
 
-message push_routes_req_t {
-  repeated string types = 1;
-  uint32 ref = 15;
+message route_deleted_msg_t {
+  string path = 1;
+  string endpoint = 2;
+  uint32 round_ref = 15;
 }
 
-message push_routes_rep_t { uint32 ref = 15; }
-
-message pull_routes_req_t { uint32 ref = 15; }
-
-message pull_routes_rep_t {
-  repeated route_group_t route_groups = 1;
-  uint32 ref = 15;
+message route_status_changed_msg_t {
+  string path = 1;
+  string endpoint = 2;
+  bool is_healthy = 3;
+  uint32 round_ref = 15;
 }
 
-message assign_frontend_req_t { uint32 ref = 15; }
+message assign_frontend_req_t { uint32 round_ref = 15; }
 
 message assign_frontend_rep_t {
   string endpoint = 1;
-  uint32 ref = 15;
+  uint32 round_ref = 15;
 }
 
 message locate_topic_req_t {
   string topic = 1;
-  uint32 ref = 15;
+  uint32 round_ref = 15;
 }
 
 message locate_topic_rep_t {
   string endpoint = 1;
-  uint32 ref = 15;
+  uint32 round_ref = 15;
 }
 
-message resolve_ip_req_t { uint32 ref = 15; }
+message resolve_ip_req_t { uint32 round_ref = 15; }
 
 message resolve_ip_rep_t {
   string ip = 1;
-  uint32 ref = 15;
+  uint32 round_ref = 15;
 }
 
 /* data type defs */
@@ -216,20 +236,13 @@ message msg_t {
   uint64 timestamp = 3;
 }
 
-message source_t {
+message header_t {
   string agent = 1;
   string endpoint = 2;
 }
 
-message trace_t {
-  uint32 ref = 1;
-  uint32 connection1_id = 2;
-  uint32 connection2_id = 3;
-  string client_id = 4;
-  string frontend_id = 5;
-}
-
-message route_group_t {
-  string type = 1;
-  repeated string endpoints = 2;
+message route_t {
+  string path = 1;
+  string endpoint = 2;
+  bool is_healthy = 3;
 }
