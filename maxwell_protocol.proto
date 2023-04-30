@@ -144,21 +144,23 @@ message error2_rep_t {
 /* middleware protocols: 65~127 */
 
 message register_frontend_req_t {
-  string endpoint = 1; // public endpoint
+  uint32 http_port = 1;
+  uint32 https_port = 2;
+  string public_ip = 3;
   uint32 ref = 15;
 }
 
 message register_frontend_rep_t { uint32 ref = 15; }
 
 message register_backend_req_t {
-  string endpoint = 1; // public endpoint
+  uint32 http_port = 1;
   uint32 ref = 15;
 }
 
 message register_backend_rep_t { uint32 ref = 15; }
 
 message register_server_req_t {
-  string endpoint = 1; // public endpoint
+  uint32 http_port = 1;
   uint32 ref = 15;
 }
 
