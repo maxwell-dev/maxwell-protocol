@@ -183,7 +183,7 @@ message delete_routes_rep_t { uint32 ref = 15; }
 message get_routes_req_t { uint32 ref = 15; }
 
 message get_routes_rep_t {
-  repeated route_t routes = 1;
+  repeated route_group_t route_groups = 1;
   uint32 ref = 15;
 }
 
@@ -199,7 +199,7 @@ message route_deleted_msg_t {
   uint32 ref = 15;
 }
 
-message route_status_changed_msg_t {
+message route_health_changed_msg_t {
   string path = 1;
   string endpoint = 2;
   bool is_healthy = 3;
@@ -243,8 +243,8 @@ message header_t {
   string endpoint = 2;
 }
 
-message route_t {
+message route_group_t {
   string path = 1;
-  string endpoint = 2;
-  bool is_healthy = 3;
+  repeated string healthy_endpoints = 2;
+  repeated string unhealthy_endpoints = 3;
 }
