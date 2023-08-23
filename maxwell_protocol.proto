@@ -146,8 +146,6 @@ message auth_rep_t {
 
 message register_frontend_req_t {
   uint32 http_port = 1;
-  uint32 https_port = 2;
-  string public_ip = 3;
   uint32 ref = 15;
 }
 
