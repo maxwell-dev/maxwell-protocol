@@ -160,12 +160,12 @@ message register_backend_req_t {
 
 message register_backend_rep_t { uint32 ref = 15; }
 
-message register_server_req_t {
+message register_service_req_t {
   uint32 http_port = 1;
   uint32 ref = 15;
 }
 
-message register_server_rep_t { uint32 ref = 15; }
+message register_service_rep_t { uint32 ref = 15; }
 
 message set_routes_req_t {
   repeated string paths = 1;
