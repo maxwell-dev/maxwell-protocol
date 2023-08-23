@@ -175,13 +175,11 @@ message set_routes_req_t {
 message set_routes_rep_t { uint32 ref = 15; }
 
 message get_routes_req_t {
-   uint32 version = 1;
    uint32 ref = 15; 
   }
 
 message get_routes_rep_t {
   repeated route_group_t route_groups = 1;
-  uint32 version = 2;
   uint32 ref = 15;
 }
 
