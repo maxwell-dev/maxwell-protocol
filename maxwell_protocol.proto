@@ -5,66 +5,88 @@ package maxwell.protocol;
 /* msg type enum */
 
 enum msg_type_t {
-  // unused, placeholder for some impls
+  /* unused, placeholder for some impls */
+
   UNKNOWN = 0;
 
-  /* business protocols: 1~32 */
+  /* common protocols: 1~32 */
 
   PING_REQ = 1;
   PING_REP = 2;
-  PUSH_REQ = 3;
-  PUSH_REP = 4;
-  PULL_REQ = 5;
-  PULL_REP = 6;
-  REQ_REQ = 7;
-  REQ_REP = 8;
-  AUTH_REQ = 27;
-  AUTH_REP = 28;
   OK_REP = 29;
   ERROR_REP = 30;
   OK2_REP = 31;
   ERROR2_REP = 32;
 
-  /* middleware protocols: 65~127 */
+  /* business protocols: 33~64 */
+
+  PUSH_REQ = 33;
+  PUSH_REP = 34;
+  PULL_REQ = 35;
+  PULL_REP = 36;
+  REQ_REQ = 39;
+  REQ_REP = 40;
+  AUTH_REQ = 41;
+  AUTH_REP = 42;
+
+  /* management protocols: 65~120 */
 
   REGISTER_FRONTEND_REQ = 65;
   REGISTER_FRONTEND_REP = 66;
   REGISTER_BACKEND_REQ = 67;
   REGISTER_BACKEND_REP = 68;
-  REGISTER_SERVER_REQ = 69;
-  REGISTER_SERVER_REP = 70;
+  REGISTER_SERVICE_REQ = 69;
+  REGISTER_SERVICE_REP = 70;
 
-  // ADD_TOPICS_REQ := 81;
-  // ADD_TOPICS_REP := 82;
-  // DELETE_TOPICS_REQ := 83;
-  // DELETE_TOPICS_REP := 84;
+  SET_ROUTES_REQ = 71;
+  SET_ROUTES_REP = 72;
+  GET_ROUTES_REQ = 75;
+  GET_ROUTES_REP = 76;
 
-  ADD_ROUTES_REQ = 91;
-  ADD_ROUTES_REP = 92;
-  // DELETE_ROUTES_REQ := 93;
-  // DELETE_ROUTES_REP := 94;
-  GET_ROUTES_REQ = 95;
-  GET_ROUTES_REP = 96;
+  PICK_FRONTEND_REQ = 81;
+  PICK_FRONTEND_REP = 82;
+  PICK_FRONTENDS_REQ = 83;
+  PICK_FRONTENDS_REP = 84;
+  LOCATE_TOPIC_REQ = 85;
+  LOCATE_TOPIC_REP = 86;
 
-  ROUTE_ADDED_MSG = 100;
-  ROUTE_DELETED_MSG = 101;
-  ROUTE_HEALTH_CHANGED_MSG = 102;
+  /* util protocols: 121~127 */
 
-  ASSIGN_FRONTEND_REQ = 111;
-  ASSIGN_FRONTEND_REP = 112;
-  LOCATE_TOPIC_REQ = 113;
-  LOCATE_TOPIC_REP = 114;
   RESOLVE_IP_REQ = 121;
   RESOLVE_IP_REP = 122;
 }
 
 /* msg type defs */
 
-/* business protocols: 1~32 */
+/* common protocols: 1~32*/
 
 message ping_req_t { uint32 ref = 15; }
 
 message ping_rep_t { uint32 ref = 15; }
+
+message ok_rep_t { uint32 ref = 15; }
+
+message error_rep_t {
+  int32 code = 1;
+  string desc = 2;
+  uint32 ref = 15;
+}
+
+message ok2_rep_t {
+  uint32 conn0_ref = 13;
+  uint32 conn1_ref = 14;
+  uint32 ref = 15;
+}
+
+message error2_rep_t {
+  int32 code = 1;
+  string desc = 2;
+  uint32 conn0_ref = 13;
+  uint32 conn1_ref = 14;
+  uint32 ref = 15;
+}
+
+/* business protocols: 33~64 */
 
 message push_req_t {
   string topic = 1;
@@ -119,29 +141,8 @@ message auth_rep_t {
   uint32 ref = 15;
 }
 
-message ok_rep_t { uint32 ref = 15; }
 
-message error_rep_t {
-  int32 code = 1;
-  string desc = 2;
-  uint32 ref = 15;
-}
-
-message ok2_rep_t {
-  uint32 conn0_ref = 13;
-  uint32 conn1_ref = 14;
-  uint32 ref = 15;
-}
-
-message error2_rep_t {
-  int32 code = 1;
-  string desc = 2;
-  uint32 conn0_ref = 13;
-  uint32 conn1_ref = 14;
-  uint32 ref = 15;
-}
-
-/* middleware protocols: 65~127 */
+/* management protocols: 65~120 */
 
 message register_frontend_req_t {
   uint32 http_port = 1;
@@ -166,50 +167,35 @@ message register_server_req_t {
 
 message register_server_rep_t { uint32 ref = 15; }
 
-message add_routes_req_t {
+message set_routes_req_t {
   repeated string paths = 1;
   uint32 ref = 15;
 }
 
-message add_routes_rep_t { uint32 ref = 15; }
+message set_routes_rep_t { uint32 ref = 15; }
 
-message delete_routes_req_t {
-  repeated string paths = 1;
-  uint32 ref = 15;
-}
-
-message delete_routes_rep_t { uint32 ref = 15; }
-
-message get_routes_req_t { uint32 ref = 15; }
+message get_routes_req_t {
+   uint32 version = 1;
+   uint32 ref = 15; 
+  }
 
 message get_routes_rep_t {
   repeated route_group_t route_groups = 1;
+  uint32 version = 2;
   uint32 ref = 15;
 }
 
-message route_added_msg_t {
-  string path = 1;
-  string endpoint = 2;
-  uint32 ref = 15;
-}
+message pick_frontend_req_t { uint32 ref = 15; }
 
-message route_deleted_msg_t {
-  string path = 1;
-  string endpoint = 2;
-  uint32 ref = 15;
-}
-
-message route_health_changed_msg_t {
-  string path = 1;
-  string endpoint = 2;
-  bool is_healthy = 3;
-  uint32 ref = 15;
-}
-
-message assign_frontend_req_t { uint32 ref = 15; }
-
-message assign_frontend_rep_t {
+message pick_frontend_rep_t {
   string endpoint = 1;
+  uint32 ref = 15;
+}
+
+message pick_frontends_req_t { uint32 ref = 15; }
+
+message pick_frontends_rep_t {
+  repeated string endpoints = 1;
   uint32 ref = 15;
 }
 
@@ -222,6 +208,8 @@ message locate_topic_rep_t {
   string endpoint = 1;
   uint32 ref = 15;
 }
+
+/* util protocols: 121~127 */
 
 message resolve_ip_req_t { uint32 ref = 15; }
 
