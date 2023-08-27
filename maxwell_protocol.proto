@@ -233,3 +233,37 @@ message route_group_t {
   repeated string healthy_endpoints = 2;
   repeated string unhealthy_endpoints = 3;
 }
+
+/* error code enum */
+
+enum error_code_t {
+  /* common error codes: 0~99 */
+  OK = 0;
+  UNKNOWN_MSG = 1;
+
+  /* master error codes: 100~199 */
+  NOT_ALLOWED_TO_REGISTER_FRONTEND = 100;
+  NOT_ALLOWED_TO_REGISTER_BACKEND = 101;
+  NOT_ALLOWED_TO_REGISTER_SERVICE = 102;
+  FAILED_TO_PICK_FRONTEND = 103;
+  FAILED_TO_LOCATE_TOPIC = 104;
+  MASTER_ERROR = 199;
+
+  /* frontend error codes: 200~299 */
+  FAILED_TO_REQ_SERVICE = 200;
+  FAILED_TO_PULL_BACKEND = 201;
+  FRONTEND_ERROR = 299;
+
+  /* backend error codes: 300~399 */
+  FAILED_TO_PUSH = 300;
+  FAILED_TO_PULL = 301;
+  UNKNOWN_TOPIC = 302;
+  BACKEND_ERROR = 399;
+
+  /* service error codes: 400~499 */
+  UNKNOWN_PATH = 400;
+  SERVICE_ERROR = 499;
+
+  /* client error codes: 500~599 */
+  CLIENT_ERROR = 599;
+}
