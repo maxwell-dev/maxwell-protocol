@@ -250,8 +250,8 @@ enum error_code_t {
   MASTER_ERROR = 199;
 
   /* frontend error codes: 200~299 */
-  FAILED_TO_REQ_SERVICE = 200;
-  FAILED_TO_PULL_BACKEND = 201;
+  FAILED_TO_REQUEST_SERVICE = 200;
+  FAILED_TO_REQUEST_BACKEND = 201;
   FRONTEND_ERROR = 299;
 
   /* backend error codes: 300~399 */
