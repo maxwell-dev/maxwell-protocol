@@ -43,6 +43,11 @@ enum msg_type_t {
   GET_ROUTES_REQ = 75;
   GET_ROUTES_REP = 76;
 
+  CHECK_IF_TOPIC_DIST_CHANGED_REQ = 77;
+  CHECK_IF_TOPIC_DIST_CHANGED_REP = 78;
+  CHECK_IF_ROUTE_DIST_CHANGED_REQ = 79;
+  CHECK_IF_ROUTE_DIST_CHANGED_REP = 80;
+
   PICK_FRONTEND_REQ = 81;
   PICK_FRONTEND_REP = 82;
   PICK_FRONTENDS_REQ = 83;
@@ -174,10 +179,30 @@ message set_routes_rep_t { uint32 ref = 15; }
 
 message get_routes_req_t {
    uint32 ref = 15; 
-  }
+}
 
 message get_routes_rep_t {
   repeated route_group_t route_groups = 1;
+  uint32 ref = 15;
+}
+
+message check_if_topic_dist_changed_req_t {
+   string checksum = 1;
+   uint32 ref = 15;
+  }
+
+message check_if_topic_dist_changed_rep_t {
+  string checksum = 1;
+  uint32 ref = 15;
+}
+
+message check_if_route_dist_changed_req_t {
+   string checksum = 1;
+   uint32 ref = 15;
+}
+
+message check_if_route_dist_changed_rep_t {
+  string checksum = 1;
   uint32 ref = 15;
 }
 
