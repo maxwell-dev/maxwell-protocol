@@ -191,7 +191,7 @@ message get_topic_dist_checksum_req_t {
   }
 
 message get_topic_dist_checksum_rep_t {
-  string checksum = 1;
+  uint32 checksum = 1;
   uint32 ref = 15;
 }
 
@@ -200,7 +200,7 @@ message get_route_dist_checksum_req_t {
 }
 
 message get_route_dist_checksum_rep_t {
-  string checksum = 1;
+  uint32 checksum = 1;
   uint32 ref = 15;
 }
 
