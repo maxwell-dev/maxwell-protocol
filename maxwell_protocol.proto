@@ -54,6 +54,8 @@ enum msg_type_t {
   PICK_FRONTENDS_REP = 84;
   LOCATE_TOPIC_REQ = 85;
   LOCATE_TOPIC_REP = 86;
+  CHECK_TOPIC_REQ = 87;
+  CHECK_TOPIC_REP = 88;
 
   /* util protocols: 121~127 */
 
@@ -225,6 +227,17 @@ message locate_topic_req_t {
 
 message locate_topic_rep_t {
   string endpoint = 1;
+  uint32 ref = 15;
+}
+
+message check_topic_req_t {
+  string topic = 1;
+  uint32 ref = 15;
+}
+
+message check_topic_rep_t {
+  string assigned_endpoint = 1;
+  string checker_endpoint = 2;
   uint32 ref = 15;
 }
 
