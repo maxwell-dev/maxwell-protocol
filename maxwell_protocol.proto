@@ -74,7 +74,6 @@ message ok_rep_t { uint32 ref = 15; }
 message error_rep_t {
   int32 code = 1;
   string desc = 2;
-  optional string extra = 3;
   uint32 ref = 15;
 }
 
@@ -87,7 +86,6 @@ message ok2_rep_t {
 message error2_rep_t {
   int32 code = 1;
   string desc = 2;
-  optional string extra = 3;
   uint32 conn0_ref = 13;
   uint32 conn1_ref = 14;
   uint32 ref = 15;
