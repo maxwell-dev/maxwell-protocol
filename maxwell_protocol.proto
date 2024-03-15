@@ -171,7 +171,15 @@ message register_service_req_t {
 message register_service_rep_t { uint32 ref = 15; }
 
 message set_routes_req_t {
-  repeated string paths = 1;
+  repeated string ws_paths = 1;
+  repeated string get_paths = 2;
+  repeated string post_paths = 3;
+  repeated string put_paths = 4;
+  repeated string patch_paths = 5;
+  repeated string delete_paths = 6;
+  repeated string head_paths = 7;
+  repeated string options_paths = 8;
+  repeated string trace_paths = 9;
   uint32 ref = 15;
 }
 
@@ -182,7 +190,15 @@ message get_routes_req_t {
 }
 
 message get_routes_rep_t {
-  repeated route_group_t route_groups = 1;
+  repeated route_group_t ws_route_groups = 1;
+  repeated route_group_t get_route_groups = 2;
+  repeated route_group_t post_route_groups = 3;
+  repeated route_group_t put_route_groups = 4;
+  repeated route_group_t patch_route_groups = 5;
+  repeated route_group_t delete_route_groups = 6;
+  repeated route_group_t head_route_groups = 7;
+  repeated route_group_t options_route_groups = 8;
+  repeated route_group_t trace_route_groups = 9;
   uint32 ref = 15;
 }
 
