@@ -150,21 +150,24 @@ message auth_rep_t {
 /* management protocols: 65~120 */
 
 message register_frontend_req_t {
-  uint32 http_port = 1;
+  string id = 1;
+  uint32 http_port = 2;
   uint32 ref = 15;
 }
 
 message register_frontend_rep_t { uint32 ref = 15; }
 
 message register_backend_req_t {
-  uint32 http_port = 1;
+  string id = 1;
+  uint32 http_port = 2;
   uint32 ref = 15;
 }
 
 message register_backend_rep_t { uint32 ref = 15; }
 
 message register_service_req_t {
-  uint32 http_port = 1;
+  string id = 1;
+  uint32 http_port = 2;
   uint32 ref = 15;
 }
 
